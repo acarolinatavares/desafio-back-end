@@ -10,10 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_15_145829) do
+ActiveRecord::Schema.define(version: 2019_09_15_210900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "owners", force: :cascade do |t|
+    t.integer "document"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "stores", force: :cascade do |t|
+    t.string "name"
+    t.bigint "owner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_stores_on_owner_id"
+  end
 
   create_table "transaction_types", force: :cascade do |t|
     t.integer "type_code"
@@ -23,4 +38,21 @@ ActiveRecord::Schema.define(version: 2019_09_15_145829) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "transactions", force: :cascade do |t|
+    t.bigint "transaction_type_id"
+    t.date "occurrence_date"
+    t.string "card"
+    t.time "occurrence_hour"
+    t.bigint "store_id"
+    t.integer "value_cents", default: 0, null: false
+    t.string "value_currency", default: "BRL", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_transactions_on_store_id"
+    t.index ["transaction_type_id"], name: "index_transactions_on_transaction_type_id"
+  end
+
+  add_foreign_key "stores", "owners"
+  add_foreign_key "transactions", "stores"
+  add_foreign_key "transactions", "transaction_types"
 end
