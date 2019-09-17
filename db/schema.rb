@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2019_09_15_210900) do
   enable_extension "plpgsql"
 
   create_table "owners", force: :cascade do |t|
-    t.integer "document"
+    t.bigint "document"
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -40,9 +40,8 @@ ActiveRecord::Schema.define(version: 2019_09_15_210900) do
 
   create_table "transactions", force: :cascade do |t|
     t.bigint "transaction_type_id"
-    t.date "occurrence_date"
+    t.datetime "occurrence_date"
     t.string "card"
-    t.time "occurrence_hour"
     t.bigint "store_id"
     t.integer "value_cents", default: 0, null: false
     t.string "value_currency", default: "BRL", null: false
